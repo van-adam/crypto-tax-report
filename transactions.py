@@ -54,7 +54,7 @@ def import_transactions_from_file(file_path: str, sheet_name: str, destination_l
 
             destination_list.append((date, quantity, price))
 
-        print("Imported transactions from file '{}' from sheet '{}''".format(file_path, sheet_name))
+        print("Imported transactions from file '{}' from sheet '{}'".format(file_path, sheet_name))
 
 
 def print_buys():
