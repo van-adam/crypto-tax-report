@@ -1,6 +1,7 @@
 import transactions as t
 from fifo_calc import calc_profit_fifo
 
+
 # print all imported transactions
 print("Imported Transactions:")
 t.print_transactions(t.buys, "buys")
@@ -24,7 +25,4 @@ for sell_transaction in t.sells:
     total_profits += sell_profit
     total_taxable += taxable_profit
 
-    # t.print_transactions(t.buys, "buys")
-
-print("\nTotal Profits: EUR {}".format(total_profits))
-print("\nTotal Taxable: EUR {}".format(total_taxable))
+print("\nTotal Profits: EUR {}, taxable: EUR {}".format(total_profits, total_taxable))
