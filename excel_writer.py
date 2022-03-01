@@ -3,7 +3,7 @@ from openpyxl.worksheet.dimensions import ColumnDimension
 from openpyxl.worksheet.worksheet import Worksheet
 
 
-def add_row(sheet: Worksheet, row_num: int, bold: bool, alignment: str, *cell_values: str) -> None:
+def add_row(sheet: Worksheet, row_num: int, bold: bool, alignment: str, *cell_values: object) -> None:
     col_num = 1
     for value in cell_values:
         cell = sheet.cell(row_num, col_num, value)

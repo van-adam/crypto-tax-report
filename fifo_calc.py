@@ -73,7 +73,7 @@ def calc_profit_fifo(sell: tuple) -> tuple:
         if taxable:
             taxable_profit += weighted_profit
 
-    return weighted_buy_price, sell_price, round(total_profit, 2), round(taxable_profit, 2)
+    return round(weighted_buy_price, 2), round(sell_price, 2), round(total_profit, 2), round(taxable_profit, 2)
 
 
 def is_taxable(buy_date: datetime.date, sell_date: datetime.date) -> bool:
