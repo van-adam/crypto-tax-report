@@ -1,3 +1,5 @@
+import datetime as d
+
 from openpyxl import load_workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
@@ -65,10 +67,18 @@ def print_sells():
     print_transactions(sells, "SELLS")
 
 
+def to_string(t: tuple) -> str:
+    date: d.date = t[0]
+    quantity = t[1]
+    price = t[2]
+
+    return "{:<10}: {:<10} :: {:<7}".format(date.strftime('%d-%m-%Y'), quantity, price)
+
+
 def print_transactions(transactions: list, label: str) -> None:
     print(label, "*" * (50 - len(label)))
 
-    for item in transactions:
-        print(item)
+    for t in transactions:
+        print(to_string(t))
 
     print("=" * 50)

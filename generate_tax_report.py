@@ -19,7 +19,7 @@ t.print_transactions(t.buys, "buys")
 t.print_transactions(t.sells, "sells")
 
 # print header of table
-tr_format = "{:<50} {:<12} {:<12} {:<12} {:<12}"
+tr_format = "{:<35} {:<12} {:<12} {:<12} {:<12}"
 print(tr_format.format("Sell Transaction", "Buy Value", "Sell Value", "Profits", "Taxable"))
 
 # create workbook
@@ -40,8 +40,8 @@ for sell_transaction in t.sells:
     # get profits per sell transaction
     buy_value, sell_value, sell_profit, taxable_profit = calc_profit_fifo(sell_transaction)
 
-    print(tr_format.format(str(sell_transaction), buy_value, sell_value, sell_profit, taxable_profit))
-    ex.add_row(sheet, row_num, False, "right", str(sell_transaction), buy_value, sell_value, sell_profit, taxable_profit)
+    print(tr_format.format(t.to_string(sell_transaction), buy_value, sell_value, sell_profit, taxable_profit))
+    ex.add_row(sheet, row_num, False, "right", t.to_string(sell_transaction), buy_value, sell_value, sell_profit, taxable_profit)
     row_num += 1
 
     # add calculated values to sums
