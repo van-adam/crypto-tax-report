@@ -72,7 +72,7 @@ def to_string(t: tuple) -> str:
     quantity = t[1]
     price = t[2]
 
-    return "{:<10}: {:<10} :: {:<7}".format(date.strftime('%d-%m-%Y'), quantity, price)
+    return "{:<10}: {:<10} :: {:<7.2f}".format(date.strftime('%d-%m-%Y'), quantity, price)
 
 
 def print_transactions(transactions: list, label: str) -> None:
