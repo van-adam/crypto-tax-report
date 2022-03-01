@@ -4,8 +4,14 @@ import transactions as t
 
 
 def calc_profit_fifo(sell: tuple) -> tuple:
+    """
+    Calculates the weighted buy price, sell price, total profit, and taxable profit from a sell transaction tuple.
+
+    :param sell: the sell transaction as a tuple (date: datetime.date, quantity: float, price: float)
+    :return: a tuple containing (weighted_buy_price: float, sell_price: float, total_profit: float, taxable_profit:
+    float); all numbers are rounded to two decimal places
+    """
     sell_date, total_sell_quantity, sell_price = sell
-    # print("Sell Quantity: {}, Sell Turnover: {}".format(total_sell_quantity, sell_price))
 
     sell_outs = []
     quantity = 0.0
@@ -77,6 +83,14 @@ def calc_profit_fifo(sell: tuple) -> tuple:
 
 
 def is_taxable(buy_date: datetime.date, sell_date: datetime.date) -> bool:
+    """
+    Determines whether a sell transaction is taxable based on the buy date and sell date. A sale is taxable whenever
+    the difference between buy date and sell date is smaller than 360 days.
+
+    :param buy_date: the buy date
+    :param sell_date: the sell date
+    :return: true if the sale is taxable
+    """
     diff: datetime.timedelta = sell_date - buy_date
     if diff.days < 360:
         taxable = True

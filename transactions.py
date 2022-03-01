@@ -44,6 +44,13 @@ buys = []
 
 
 def import_transactions_from_file(file_path: str, sheet_name: str, destination_list: list) -> None:
+    """
+    Imports a list of transactions from the passed XLSX file to the passed destination list.
+
+    :param file_path: the file path to the XLSX file containing the transactions
+    :param sheet_name: the name of the sheet containing the transactions
+    :param destination_list: the list to write the transactions to
+    """
     workbook = load_workbook(file_path)
     sheet: Worksheet = workbook[sheet_name]
 
@@ -59,15 +66,27 @@ def import_transactions_from_file(file_path: str, sheet_name: str, destination_l
         print("Imported transactions from file '{}' from sheet '{}'".format(file_path, sheet_name))
 
 
-def print_buys():
+def print_buys() -> None:
+    """
+    Convenience method to print transactions.buys.
+    """
     print_transactions(buys, "BUYS")
 
 
 def print_sells():
+    """
+    Convenience method to print transactions.buys.
+    """
     print_transactions(sells, "SELLS")
 
 
 def to_string(t: tuple) -> str:
+    """
+    Formats a transaction tuple as a String.
+
+    :param t: the transaction tuple
+    :return: a formatted String based on the tuple
+    """
     date: d.date = t[0]
     quantity = t[1]
     price = t[2]
@@ -76,6 +95,13 @@ def to_string(t: tuple) -> str:
 
 
 def print_transactions(transactions: list, label: str) -> None:
+    """
+    Prints the passed list of transactions to the console.
+
+    :param transactions: the transactions list
+    :param label: the label above the output
+    :return:
+    """
     print(label, "*" * (50 - len(label)))
 
     for t in transactions:
