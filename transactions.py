@@ -2,7 +2,8 @@ import datetime as d
 from openpyxl import load_workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
-# date, quantity, price; sorted by date ascending
+
+# tuple: (date: datetime.date, quantity: float, price: float); sorted by date ascending
 sells = []
 buys = []
 
@@ -72,7 +73,3 @@ def print_transactions(transactions: list, label: str) -> None:
         print(item)
 
     print("=" * 50)
-
-
-import_transactions_from_file('transactions.xlsx', "Sells", sells)
-import_transactions_from_file('transactions.xlsx', "Buys", buys)

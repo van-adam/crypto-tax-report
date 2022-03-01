@@ -1,11 +1,16 @@
 from openpyxl import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
-import transactions as t
 import excel_writer as ex
+import transactions as t
 from fifo_calc import calc_profit_fifo
 
-TAX_REPORT_FILE_PATH = "tax_report.xlsx"
+# imported transactions file name
+TRANSACTIONS_FILE_NAME = "LTC_transactions.xlsx"
+TAX_REPORT_FILE_PATH = "LTC_tax_report.xlsx"
+
+t.import_transactions_from_file(TRANSACTIONS_FILE_NAME, "Sells", t.sells)
+t.import_transactions_from_file(TRANSACTIONS_FILE_NAME, "Buys", t.buys)
 
 # print all imported transactions
 print("Imported Transactions:")
@@ -22,7 +27,7 @@ sheet: Worksheet = workbook.active
 row_num = 1
 
 # create sheet header
-ex.add_header_cell(sheet, "Sell Transaction", "Buy Value", "Sell Value", "Profits", "Taxable Profit")
+ex.add_row(sheet, 1, True, "left", "Sell Transaction", "Buy Value", "Sell Value", "Profits", "Taxable Profit")
 row_num += 1
 
 # calculate sums
@@ -39,21 +44,23 @@ for sell_transaction in t.sells:
                               round(sell_value, 2),
                               round(sell_profit, 2),
                               round(taxable_profit, 2)))
-    ex.add_row(sheet, row_num, str(sell_transaction),
+    ex.add_row(sheet, row_num, False, "right", str(sell_transaction),
                round(buy_value, 2),
                round(sell_value, 2),
                round(sell_profit, 2),
                round(taxable_profit, 2))
     row_num += 1
 
-    sum_buy_value += buy_value
-    sum_sell_value += sell_value
-    sum_profits += sell_profit
-    sum_taxable += taxable_profit
+    # add calculated values to sums
+    sum_buy_value += round(buy_value, 2)
+    sum_sell_value += round(sell_value, 2)
+    sum_profits += round(sell_profit, 2)
+    sum_taxable += round(taxable_profit, 2)
 
 print()
 # add sums to bottom of sheet
-ex.add_row(sheet, row_num + 1, "",
+ex.add_row(sheet, row_num + 1, True, "right",
+           "",
            str(round(sum_buy_value)),
            str(round(sum_sell_value, 2)),
            str(round(sum_profits, 2)),

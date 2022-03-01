@@ -1,18 +1,14 @@
+from openpyxl.styles import Font, Alignment
 from openpyxl.worksheet.dimensions import ColumnDimension
 from openpyxl.worksheet.worksheet import Worksheet
 
 
-def add_header_cell(sheet: Worksheet, *column_titles: str) -> None:
-    col_num = 1
-    for column_title in column_titles:
-        sheet.cell(1, col_num, column_title)
-        col_num += 1
-
-
-def add_row(sheet: Worksheet, row_num: int, *cell_values: str) -> None:
+def add_row(sheet: Worksheet, row_num: int, bold: bool, alignment: str, *cell_values: str) -> None:
     col_num = 1
     for value in cell_values:
-        sheet.cell(row_num, col_num, value)
+        cell = sheet.cell(row_num, col_num, value)
+        cell.font = Font(bold=bold)
+        cell.alignment = Alignment(horizontal=alignment)
         col_num += 1
 
 
