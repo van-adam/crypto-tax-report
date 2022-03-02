@@ -7,7 +7,7 @@ from fifo_calc import calc_profit_fifo
 
 
 # constants
-TOKEN_ABBREVIATION = "XRP"
+TOKEN_ABBREVIATION = "LTC"
 TRANSACTIONS_DIR = "transactions/"
 TRANSACTIONS_FILE_PATH = TRANSACTIONS_DIR + TOKEN_ABBREVIATION + "_transactions.xlsx"
 TAX_REPORTS_DIR = "tax_reports/"

@@ -16,7 +16,7 @@ def calc_profit_fifo(sell: tuple) -> tuple:
     sell_outs = []
     quantity = 0.0
     while quantity != total_sell_quantity:
-        print("quantity: {}".format(quantity))
+        #print("quantity: {}".format(quantity))
         try:
             buy = t.buys[0]
         except IndexError:
@@ -69,21 +69,21 @@ def calc_profit_fifo(sell: tuple) -> tuple:
             t.buys.insert(0, updated_buy)
 
     # calculate weighted buy price
-    weighted_buy_price = 0.0
+    total_buy_price = 0.0
     total_profit = 0.0
     taxable_profit = 0.0
     for sell_out in sell_outs:
         buy_quantity, buy_price, taxable = sell_out
 
-        share = (buy_quantity / total_sell_quantity)
-        weighted_buy_price += buy_price * share
+        total_buy_price += buy_price
 
-        weighted_profit = (sell_price - buy_price) * share
+        sell_share = (buy_quantity / total_sell_quantity)
+        weighted_profit = sell_price * sell_share - buy_price
         total_profit += weighted_profit
         if taxable:
             taxable_profit += weighted_profit
 
-    return round(weighted_buy_price, 2), round(sell_price, 2), round(total_profit, 2), round(taxable_profit, 2)
+    return round(total_buy_price, 2), round(sell_price, 2), round(total_profit, 2), round(taxable_profit, 2)
 
 
 def is_taxable(buy_date: datetime.date, sell_date: datetime.date) -> bool:
