@@ -7,12 +7,14 @@ from fifo_calc import calc_profit_fifo
 
 
 # constants
-TOKEN_ABBREVIATION = "LTC"
-TRANSACTIONS_FILE_NAME = TOKEN_ABBREVIATION + "_transactions.xlsx"
-TAX_REPORT_FILE_PATH = TOKEN_ABBREVIATION + "_tax_report.xlsx"
+TOKEN_ABBREVIATION = "XRP"
+TRANSACTIONS_DIR = "transactions/"
+TRANSACTIONS_FILE_PATH = TRANSACTIONS_DIR + TOKEN_ABBREVIATION + "_transactions.xlsx"
+TAX_REPORTS_DIR = "tax_reports/"
+TAX_REPORT_FILE_PATH = TAX_REPORTS_DIR + TOKEN_ABBREVIATION + "_tax_report.xlsx"
 
-t.import_transactions_from_file(TRANSACTIONS_FILE_NAME, "Sells", t.sells)
-t.import_transactions_from_file(TRANSACTIONS_FILE_NAME, "Buys", t.buys)
+t.import_transactions_from_file(TRANSACTIONS_FILE_PATH, "Sells", t.sells)
+t.import_transactions_from_file(TRANSACTIONS_FILE_PATH, "Buys", t.buys)
 
 # print all imported transactions
 print("Imported Transactions:")
@@ -52,6 +54,8 @@ for sell_transaction in t.sells:
     sum_sell_value += sell_value
     sum_profits += sell_profit
     sum_taxable += taxable_profit
+
+    # t.print_buys()
 
 print("\nTotal Profits: EUR {}, taxable: EUR {}".format(sum_profits, sum_taxable))
 # add sums to bottom of sheet

@@ -16,6 +16,7 @@ def calc_profit_fifo(sell: tuple) -> tuple:
     sell_outs = []
     quantity = 0.0
     while quantity != total_sell_quantity:
+        print("quantity: {}".format(quantity))
         try:
             buy = t.buys[0]
         except IndexError:
@@ -26,27 +27,29 @@ def calc_profit_fifo(sell: tuple) -> tuple:
             return 0.0, 0.0, 0.0, 0.0
 
         buy_date, buy_quantity, buy_price = buy
+
+        # round buy_quantity to 10 decimal places to avoid IndexError above
+        buy_quantity = round(buy_quantity, 10)
         if (quantity + buy_quantity) == total_sell_quantity:
-            # print("enough")
             quantity += buy_quantity
 
             taxable = is_taxable(buy_date, sell_date)
 
             t.buys.pop(0)
             sell_outs.append((buy_quantity, buy_price, taxable))
-            # t.print_transactions(sell_outs, "sell_outs")
+            # print("enough")
+            # print_sell_outs(sell_outs, "sell_outs")
             break
         elif (quantity + buy_quantity) < total_sell_quantity:
-            # print("too little")
             quantity += buy_quantity
 
             taxable = is_taxable(buy_date, sell_date)
 
             t.buys.pop(0)
             sell_outs.append((buy_quantity, buy_price, taxable))
-            # t.print_transactions(sell_outs, "sell_outs")
+            # print("too little")
+            # print_sell_outs(sell_outs, "sell_outs")
         elif (quantity + buy_quantity) > total_sell_quantity:
-            # print("too much")
             need = total_sell_quantity - quantity
             if need == 0.0:
                 # print("BREAK")
@@ -56,7 +59,8 @@ def calc_profit_fifo(sell: tuple) -> tuple:
             taxable = is_taxable(buy_date, sell_date)
             sell_out = (need, buy_price * need / buy_quantity, taxable)
             sell_outs.append(sell_out)
-            # t.print_transactions(sell_outs, "sell_outs")
+            # print("too much")
+            # print_sell_outs(sell_outs, "sell_outs")
 
             # change transaction and re-add it to buy transactions
             rest = buy_quantity - need
@@ -98,3 +102,37 @@ def is_taxable(buy_date: datetime.date, sell_date: datetime.date) -> bool:
         taxable = False
 
     return taxable
+
+
+def print_sell_outs(transactions: list, label: str) -> None:
+    """
+    Prints the passed list of transactions to the console.
+
+    :param transactions: the transactions list
+    :param label: the label above the output
+    :return:
+    """
+    print(label, "*" * (50 - len(label)))
+
+    for transaction in transactions:
+        print(to_string(transaction))
+
+    print("=" * 50)
+
+
+def to_string(transaction: tuple) -> str:
+    """
+    Formats a transaction tuple as a String.
+
+    :param transaction: the transaction tuple
+    :return: a formatted String based on the tuple
+    """
+    quantity = transaction[0]
+    price = transaction[1]
+
+    if transaction[2]:
+        taxable = "True"
+    else:
+        taxable = "False"
+
+    return "{:<10} :: {:<10} :: {:<5}".format(quantity, price, taxable)
