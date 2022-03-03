@@ -49,16 +49,18 @@ def import_transactions_from_file(file_path: str, sheet_name: str, destination_l
     workbook = load_workbook(file_path)
     sheet: Worksheet = workbook[sheet_name]
 
-    if len(destination_list) == 0:
-        for row in range(2, sheet.max_row + 1):
-            date = sheet.cell(row, 1).value
-            date = date.date()
-            quantity = sheet.cell(row, 2).value
-            price = sheet.cell(row, 3).value
+    if len(destination_list) != 0:
+        destination_list.clear()
 
-            destination_list.append((date, quantity, price))
+    for row in range(2, sheet.max_row + 1):
+        date = sheet.cell(row, 1).value
+        date = date.date()
+        quantity = sheet.cell(row, 2).value
+        price = sheet.cell(row, 3).value
 
-        print("Imported transactions from file '{}' from sheet '{}'".format(file_path, sheet_name))
+        destination_list.append((date, quantity, price))
+
+    print("Imported transactions from file '{}' from sheet '{}'".format(file_path, sheet_name))
 
 
 def print_buys() -> None:

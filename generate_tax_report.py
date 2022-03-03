@@ -1,73 +1,80 @@
 from openpyxl import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
-import excel_writer as ex
+import excel_writer as x
 import transactions as t
 from fifo_calc import calc_profit_fifo
 
-
-# constants
-TOKEN_ABBREVIATION = "LTC"
 TRANSACTIONS_DIR = "transactions/"
-TRANSACTIONS_FILE_PATH = TRANSACTIONS_DIR + TOKEN_ABBREVIATION + "_transactions.xlsx"
 TAX_REPORTS_DIR = "tax_reports/"
-TAX_REPORT_FILE_PATH = TAX_REPORTS_DIR + TOKEN_ABBREVIATION + "_tax_report.xlsx"
+# list of token abbreviations
+tokens = ["LTC", "XRP", "ETH", "BTC", "ADA"]
 
-t.import_transactions_from_file(TRANSACTIONS_FILE_PATH, "Sells", t.sells)
-t.import_transactions_from_file(TRANSACTIONS_FILE_PATH, "Buys", t.buys)
 
-# print all imported transactions
-print("Imported Transactions:")
-t.print_transactions(t.buys, "buys")
-t.print_transactions(t.sells, "sells")
+def generate_tax_report(token_abbr: str) -> None:
+    # constants
+    transactions_file_path = TRANSACTIONS_DIR + token_abbr + "_transactions.xlsx"
+    tax_report_file_path = TAX_REPORTS_DIR + token_abbr + "_tax_report.xlsx"
 
-# print header of table
-tr_format = "{:<35} {:<5} {:<12} {:<12} {:<12} {:<12}"
-print(tr_format.format("Sell Transaction", "Token", "Buy Value", "Sell Value", "Profits", "Taxable"))
+    t.import_transactions_from_file(transactions_file_path, "Sells", t.sells)
+    t.import_transactions_from_file(transactions_file_path, "Buys", t.buys)
 
-# create workbook
-workbook: Workbook = Workbook()
-sheet: Worksheet = workbook.active
-row_num = 1
+    # print all imported transactions
+    print("Imported Transactions:")
+    t.print_transactions(t.buys, "buys")
+    t.print_transactions(t.sells, "sells")
 
-# create sheet header
-ex.add_row(sheet, 1, True, "left", "Sell Transaction", "Token", "Buy Value", "Sell Value", "Profits", "Taxable Profit")
-row_num += 1
+    # print header of table
+    tr_format = "{:<35} {:<5} {:<12} {:<12} {:<12} {:<12}"
+    print(tr_format.format("Sell Transaction", "Token", "Buy Value", "Sell Value", "Profits", "Taxable"))
 
-# calculate sums
-sum_buy_value = 0.0
-sum_sell_value = 0.0
-sum_profits = 0.0
-sum_taxable = 0.0
-for sell_transaction in t.sells:
-    # get profits per sell transaction
-    buy_value, sell_value, sell_profit, taxable_profit = calc_profit_fifo(sell_transaction)
+    # create workbook
+    workbook: Workbook = Workbook()
+    sheet: Worksheet = workbook.active
+    row_num = 1
 
-    print(tr_format.format(t.to_string(sell_transaction), TOKEN_ABBREVIATION,
-                           buy_value, sell_value, sell_profit, taxable_profit))
-    ex.add_row(sheet, row_num, False, "right", t.to_string(sell_transaction), TOKEN_ABBREVIATION,
-               buy_value, sell_value, sell_profit, taxable_profit)
+    # create sheet header
+    x.add_row(sheet, 1, True, "left", "Sell Transaction", "Token", "Buy Value", "Sell Value", "Profits", "Taxable Profit")
     row_num += 1
 
-    # add calculated values to sums
-    sum_buy_value += buy_value
-    sum_sell_value += sell_value
-    sum_profits += sell_profit
-    sum_taxable += taxable_profit
+    # calculate sums
+    sum_buy_value = 0.0
+    sum_sell_value = 0.0
+    sum_profits = 0.0
+    sum_taxable = 0.0
+    for sell_transaction in t.sells:
+        # get profits per sell transaction
+        buy_value, sell_value, sell_profit, taxable_profit = calc_profit_fifo(sell_transaction)
 
-    # t.print_buys()
+        print(tr_format.format(t.to_string(sell_transaction), token_abbr,
+                               buy_value, sell_value, sell_profit, taxable_profit))
+        x.add_row(sheet, row_num, False, "right", t.to_string(sell_transaction), token_abbr,
+                  buy_value, sell_value, sell_profit, taxable_profit)
+        row_num += 1
 
-print("\nTotal Profits: EUR {}, taxable: EUR {}".format(sum_profits, sum_taxable))
-# add sums to bottom of sheet
-ex.add_row(sheet, row_num + 1, True, "right",
-           "",
-           "",
-           round(sum_buy_value, 2),
-           round(sum_sell_value, 2),
-           round(sum_profits, 2),
-           round(sum_taxable, 2))
+        # add calculated values to sums
+        sum_buy_value += buy_value
+        sum_sell_value += sell_value
+        sum_profits += sell_profit
+        sum_taxable += taxable_profit
 
-print("\nAuto-sizing columns to fit content")
-ex.autosize_columns(sheet)
-print(f"Write Workbook to file {TAX_REPORT_FILE_PATH}")
-workbook.save(TAX_REPORT_FILE_PATH)
+        # t.print_buys()
+
+    print("\nTotal Profits: EUR {}, taxable: EUR {}".format(round(sum_profits, 2), round(sum_taxable, 2)))
+    # add sums to bottom of sheet
+    x.add_row(sheet, row_num + 1, True, "right",
+               "",
+               "",
+              round(sum_buy_value, 2),
+              round(sum_sell_value, 2),
+              round(sum_profits, 2),
+              round(sum_taxable, 2))
+
+    print("\nAuto-sizing columns to fit content")
+    x.autosize_columns(sheet)
+    print(f"Write Workbook to file {tax_report_file_path}")
+    workbook.save(tax_report_file_path)
+
+
+for token in tokens:
+    generate_tax_report(token)
