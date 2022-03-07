@@ -13,6 +13,12 @@ tokens = ["LTC", "XRP", "ETH", "BTC", "ADA"]
 
 
 def generate_tax_report(token_abbr: str) -> None:
+    """
+    Generates a tax report of the passed crypto token containing Sell Transaction, Token, Buy Value, Sell Value,
+    Profits, and Taxable Profit. The report is created based on the [token_abbr]_transactions.xlsx of the passed token.
+
+    :param token_abbr: the token abbreviation, e.g. LTC
+    """
     transactions_file_path = TRANSACTIONS_DIR + token_abbr + "_transactions.xlsx"
     tax_report_file_path = TAX_REPORTS_DIR + token_abbr + "_tax_report.xlsx"
 
