@@ -5,6 +5,7 @@ import excel_writer as x
 import transactions as t
 from fifo_calc import calc_profit_fifo
 
+# constants
 TRANSACTIONS_DIR = "transactions/"
 TAX_REPORTS_DIR = "tax_reports/"
 # list of token abbreviations
@@ -12,7 +13,6 @@ tokens = ["LTC", "XRP", "ETH", "BTC", "ADA"]
 
 
 def generate_tax_report(token_abbr: str) -> None:
-    # constants
     transactions_file_path = TRANSACTIONS_DIR + token_abbr + "_transactions.xlsx"
     tax_report_file_path = TAX_REPORTS_DIR + token_abbr + "_tax_report.xlsx"
 
