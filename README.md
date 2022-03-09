@@ -1,7 +1,6 @@
 # crypto-tax-report
 
 ## Overview
-***
 The Crypto Tax Report calculates your taxable profits from crypto based on your transaction history.
 The used inventory method to calculate your profits is FIFO (First-In-First-Out).
 
@@ -12,7 +11,6 @@ Sell transactions that are apart from their corresponding buy transactions by mo
 I created this project when I almost finished my tax declaration 2021 but still had one procrastinated part left to do - the crypto taxes. I knew what I needed to do when I would have the purchase value and the sell value but how to get to the purchase value of every sell transaction while considering FIFO was a mind-numbing obstacle for me. So I looked for software online that does the job for me, and I was faced with prices of three-digits for every tax year. I considered those prices ridiculous when you barely made four digits with crypto so far. Then I became aware of my basic Python skills and thought maybe I could just programm it myself. So here it is!
 
 ## Inventory Methods
-***
 ### FIFO (First-In-First-Out)
 In the FIFO inventory method, it is assumed that crypto assets that have been purchased first (First-In) are also sold first (First-Out).
 
@@ -34,7 +32,6 @@ Your capital gains would be 500 - 300 = 200 EUR.
 tbd-->
 
 ## Getting Started
-***
 
 ### Prerequisites
 The following prerequisites are necessary to execute the Python script:
