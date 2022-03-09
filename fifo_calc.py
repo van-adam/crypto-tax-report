@@ -1,5 +1,6 @@
 import datetime
 
+import config as c
 import transactions as t
 
 
@@ -96,7 +97,7 @@ def is_taxable(buy_date: datetime.date, sell_date: datetime.date) -> bool:
     :return: true if the sale is taxable
     """
     diff: datetime.timedelta = sell_date - buy_date
-    if diff.days < 360:
+    if diff.days < c.taxfree_timedelta:
         taxable = True
     else:
         taxable = False

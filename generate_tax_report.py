@@ -1,15 +1,12 @@
 from openpyxl import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
+import config as c
 import excel_writer as x
 import transactions as t
 from fifo_calc import calc_profit_fifo
 
-# constants
-TRANSACTIONS_DIR = "transactions/"
-TAX_REPORTS_DIR = "tax_reports/"
-# list of token abbreviations
-tokens = ["LTC", "XRP", "ETH", "BTC", "ADA"]
+
 
 
 def generate_tax_report(token_abbr: str) -> None:
@@ -19,8 +16,8 @@ def generate_tax_report(token_abbr: str) -> None:
 
     :param token_abbr: the token abbreviation, e.g. LTC
     """
-    transactions_file_path = TRANSACTIONS_DIR + token_abbr + "_transactions.xlsx"
-    tax_report_file_path = TAX_REPORTS_DIR + token_abbr + "_tax_report.xlsx"
+    transactions_file_path = c.TRANSACTIONS_DIR + token_abbr + "_transactions.xlsx"
+    tax_report_file_path = c.TAX_REPORTS_DIR + token_abbr + "_tax_report.xlsx"
 
     t.import_transactions_from_file(transactions_file_path, "Sells", t.sells)
     t.import_transactions_from_file(transactions_file_path, "Buys", t.buys)
@@ -50,7 +47,10 @@ def generate_tax_report(token_abbr: str) -> None:
     sum_taxable = 0.0
     for sell_transaction in t.sells:
         # get profits per sell transaction
-        buy_value, sell_value, sell_profit, taxable_profit = calc_profit_fifo(sell_transaction)
+        if c.USE_FIFO:
+            buy_value, sell_value, sell_profit, taxable_profit = calc_profit_fifo(sell_transaction)
+        else:
+            buy_value, sell_value, sell_profit, taxable_profit = (0.0, 0.0, 0.0, 0.0)
 
         print(tr_format.format(t.to_string(sell_transaction), token_abbr,
                                buy_value, sell_value, sell_profit, taxable_profit))
@@ -82,5 +82,5 @@ def generate_tax_report(token_abbr: str) -> None:
     workbook.save(tax_report_file_path)
 
 
-for token in tokens:
+for token in c.tokens:
     generate_tax_report(token)
