@@ -1,4 +1,5 @@
-log_level = "DEBUG"
+LOG_LEVEL = "INFO"
+
 # constants
 TRANSACTIONS_DIR = "transactions/"
 TAX_REPORTS_DIR = "tax_reports/"
@@ -6,4 +7,4 @@ TAX_REPORTS_DIR = "tax_reports/"
 tokens = ["LTC", "XRP", "ETH", "BTC", "ADA"]
 
 USE_FIFO = True
-taxfree_timedelta = 360
+TAXFREE_TIMEDELTA = 360

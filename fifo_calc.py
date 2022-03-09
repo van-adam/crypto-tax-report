@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 import config as c
 import transactions as t
@@ -17,14 +18,14 @@ def calc_profit_fifo(sell: tuple) -> tuple:
     sell_outs = []
     quantity = 0.0
     while quantity != total_sell_quantity:
-        #print("quantity: {}".format(quantity))
+        log.debug("quantity: {}".format(quantity))
         try:
             buy = t.buys[0]
         except IndexError:
-            print("Not enough crypto assets for the sale {}: list index out of range!".format(sell))
+            log.error("Not enough crypto assets for the sale {}: list index out of range!".format(sell))
             latest_sell_out = sell_outs.pop()
             t.buys.insert(len(t.buys), latest_sell_out)
-            print("Re-added latest sell out {} to buy transactions".format(latest_sell_out))
+            log.info("Re-added latest sell out {} to buy transactions".format(latest_sell_out))
             return 0.0, 0.0, 0.0, 0.0
 
         buy_date, buy_quantity, buy_price = buy
@@ -38,8 +39,8 @@ def calc_profit_fifo(sell: tuple) -> tuple:
 
             t.buys.pop(0)
             sell_outs.append((buy_quantity, buy_price, taxable))
-            # print("enough")
-            # print_sell_outs(sell_outs, "sell_outs")
+            log.debug("enough")
+            print_sell_outs(sell_outs, "sell_outs")
             break
         elif (quantity + buy_quantity) < total_sell_quantity:
             quantity += buy_quantity
@@ -48,20 +49,20 @@ def calc_profit_fifo(sell: tuple) -> tuple:
 
             t.buys.pop(0)
             sell_outs.append((buy_quantity, buy_price, taxable))
-            # print("too little")
-            # print_sell_outs(sell_outs, "sell_outs")
+            log.debug("too little")
+            print_sell_outs(sell_outs, "sell_outs")
         elif (quantity + buy_quantity) > total_sell_quantity:
             need = total_sell_quantity - quantity
             if need == 0.0:
-                # print("BREAK")
+                log.debug("BREAK")
                 break
 
             quantity += need
             taxable = is_taxable(buy_date, sell_date)
             sell_out = (need, buy_price * need / buy_quantity, taxable)
             sell_outs.append(sell_out)
-            # print("too much")
-            # print_sell_outs(sell_outs, "sell_outs")
+            log.debug("too much")
+            print_sell_outs(sell_outs, "sell_outs")
 
             # change transaction and re-add it to buy transactions
             rest = buy_quantity - need
@@ -97,7 +98,7 @@ def is_taxable(buy_date: datetime.date, sell_date: datetime.date) -> bool:
     :return: true if the sale is taxable
     """
     diff: datetime.timedelta = sell_date - buy_date
-    if diff.days < c.taxfree_timedelta:
+    if diff.days < c.TAXFREE_TIMEDELTA:
         taxable = True
     else:
         taxable = False
@@ -113,12 +114,12 @@ def print_sell_outs(transactions: list, label: str) -> None:
     :param label: the label above the output
     :return:
     """
-    print(label, "*" * (50 - len(label)))
+    log.debug("{}{}".format(label, "*" * (50 - len(label))))
 
     for transaction in transactions:
-        print(to_string(transaction))
+        log.debug(to_string(transaction))
 
-    print("=" * 50)
+    log.debug("=" * 50)
 
 
 def to_string(transaction: tuple) -> str:
@@ -137,3 +138,6 @@ def to_string(transaction: tuple) -> str:
         taxable = "False"
 
     return "{:<10} :: {:<10} :: {:<5}".format(quantity, price, taxable)
+
+
+log = logging.getLogger()

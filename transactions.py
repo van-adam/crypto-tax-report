@@ -1,8 +1,11 @@
+import logging
 import datetime as d
 
 from openpyxl import load_workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
+
+log = logging.getLogger()
 
 # tuple: (date: datetime.date, quantity: float, price: float); sorted by date ascending
 sells = []
@@ -60,7 +63,7 @@ def import_transactions_from_file(file_path: str, sheet_name: str, destination_l
 
         destination_list.append((date, quantity, price))
 
-    print("Imported transactions from file '{}' from sheet '{}'".format(file_path, sheet_name))
+    log.info("Imported transactions from file '{}' from sheet '{}'".format(file_path, sheet_name))
 
 
 def print_buys() -> None:
@@ -70,7 +73,7 @@ def print_buys() -> None:
     print_transactions(buys, "BUYS")
 
 
-def print_sells():
+def print_sells() -> None:
     """
     Convenience method to print transactions.buys.
     """
@@ -99,9 +102,10 @@ def print_transactions(transactions: list, label: str) -> None:
     :param label: the label above the output
     :return:
     """
-    print(label, "*" * (50 - len(label)))
+    line_length = 95
+    log.info("{}{}".format(label, "*" * (line_length - len(label))))
 
     for t in transactions:
-        print(to_string(t))
+        log.info(to_string(t))
 
-    print("=" * 50)
+    log.info("=" * line_length)

@@ -1,3 +1,5 @@
+import logging
+
 from openpyxl import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
@@ -5,8 +7,6 @@ import config as c
 import excel_writer as x
 import transactions as t
 from fifo_calc import calc_profit_fifo
-
-
 
 
 def generate_tax_report(token_abbr: str) -> None:
@@ -22,14 +22,14 @@ def generate_tax_report(token_abbr: str) -> None:
     t.import_transactions_from_file(transactions_file_path, "Sells", t.sells)
     t.import_transactions_from_file(transactions_file_path, "Buys", t.buys)
 
-    # print all imported transactions
-    print("Imported Transactions:")
-    t.print_transactions(t.buys, "buys")
-    t.print_transactions(t.sells, "sells")
+    # log all imported transactions
+    log.info("Imported Transactions:")
+    t.print_buys()
+    t.print_sells()
 
-    # print header of table
+    # log header of table
     tr_format = "{:<35} {:<5} {:<12} {:<12} {:<12} {:<12}"
-    print(tr_format.format("Sell Transaction", "Token", "Buy Value", "Sell Value", "Profits", "Taxable"))
+    log.info(tr_format.format("Sell Transaction", "Token", "Buy Value", "Sell Value", "Profits", "Taxable"))
 
     # create workbook
     workbook: Workbook = Workbook()
@@ -52,8 +52,8 @@ def generate_tax_report(token_abbr: str) -> None:
         else:
             buy_value, sell_value, sell_profit, taxable_profit = (0.0, 0.0, 0.0, 0.0)
 
-        print(tr_format.format(t.to_string(sell_transaction), token_abbr,
-                               buy_value, sell_value, sell_profit, taxable_profit))
+        log.info(tr_format.format(t.to_string(sell_transaction), token_abbr,
+                                  buy_value, sell_value, sell_profit, taxable_profit))
         x.add_row(sheet, row_num, False, "right", t.to_string(sell_transaction), token_abbr,
                   buy_value, sell_value, sell_profit, taxable_profit)
         row_num += 1
@@ -64,23 +64,24 @@ def generate_tax_report(token_abbr: str) -> None:
         sum_profits += sell_profit
         sum_taxable += taxable_profit
 
-        # t.print_buys()
-
-    print("\nTotal Profits: EUR {}, taxable: EUR {}".format(round(sum_profits, 2), round(sum_taxable, 2)))
+    log.info("Total Profits: {}, taxable: {}".format(round(sum_profits, 2), round(sum_taxable, 2)))
     # add sums to bottom of sheet
     x.add_row(sheet, row_num + 1, True, "right",
-               "",
-               "",
+              "",
+              "",
               round(sum_buy_value, 2),
               round(sum_sell_value, 2),
               round(sum_profits, 2),
               round(sum_taxable, 2))
 
-    print("\nAuto-sizing columns to fit content")
+    log.info("Auto-sizing columns to fit content")
     x.autosize_columns(sheet)
-    print(f"Write Workbook to file {tax_report_file_path}")
+    log.info(f"Write Workbook to file {tax_report_file_path}")
     workbook.save(tax_report_file_path)
 
+
+logging.basicConfig(level=c.LOG_LEVEL, format="%(asctime)s — %(name)s — %(levelname)s — %(funcName)s:%(lineno)d — %(message)s")
+log = logging.getLogger()
 
 for token in c.tokens:
     generate_tax_report(token)

@@ -4,7 +4,7 @@
 The Crypto Tax Report calculates your taxable profits from crypto based on your transaction history.
 The used inventory method to calculate your profits is FIFO (First-In-First-Out).
 
-Sell transactions that are apart from their corresponding buy transactions by more than or equal to 360 days (1 year) are considered non-taxable or "tax-free" so to say.
+Sell transactions that are apart from their corresponding buy transactions by more than or equal to a configurable time difference, e. g. 360 days (1 year), are considered non-taxable or "tax-free" so to say.
 
 
 #### A bit of history
@@ -46,9 +46,12 @@ git clone https://github.com/ericvancoffee/crypto-tax-report.git
 
 ### Configuration
 In the Python file ```generate_tax_report.py``` at the top, you can define:
-1. ```TRANSACTIONS_DIR```: directory from which to import the crypto transactions
-2. ```TAX_REPORTS_DIR```: directory to which to export the crypto tax reports
-3. ```tokens```: token abbreviations for which to generate a tax report
+1. ```LOG_LEVEL```: log level of the script
+2. ```TRANSACTIONS_DIR```: directory from which to import the crypto transactions
+3. ```TAX_REPORTS_DIR```: directory to which to export the crypto tax reports
+4. ```tokens```: token abbreviations for which to generate a tax report
+5. ```USE_FIFO```: whether to use inventory method FIFO (only one available so far)
+6. ```TAXFREE_TIMEDELTA```: the time difference between buy and sell transactions so they are considered non-taxable/tax-free
 
 The transactions are imported from preformatted .XLSX files. To see an example of such a file, please refer to the ```transations_example.xlsx``` file in the ```/transactions``` directory.
 The transactions files need to be named as ```[token]_transactions.xlsx```, e.g. ```BTC_transactions.xlsx``` and placed in the ```TRANSACTIONS_DIR```.
