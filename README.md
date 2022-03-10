@@ -56,7 +56,7 @@ tbd-->
 
 ### Prerequisites
 The following prerequisites are necessary to execute the Python script:
-- Python 3+
+- Python 3.6+
   - openpyxl 3.0.0+
 - Ability to create .XLSX files, e.g. Microsoft Excel or Numbers by Apple.
 
@@ -91,6 +91,12 @@ Usually you can easily run in command line or git bash:
 ```
 source path/to/venv/Scripts/activate
 ```
+
+## Open Source Software (OSS)
+This script uses open source software (OSS). The OSS used are listed below.
+- openpyxl
+  - license: MIT License (MIT)
+  - © Copyright 2010 - 2021 openpyxl
 
 ## Disclaimer
 Tax laws differ from country to country. This script does not necessarily comply with the tax law in your country and 

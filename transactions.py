@@ -8,8 +8,22 @@ from openpyxl.worksheet.worksheet import Worksheet
 log = logging.getLogger()
 
 # tuple: (date: datetime.date, quantity: float, price: float); sorted by date ascending
-sells = []
-buys = []
+# sells = []
+# buys = []
+
+sells = [
+    (d.date(2021, 5, 1), 3.0, 100),
+    (d.date(2021, 6, 1), 1.0, 50),
+    (d.date(2021, 7, 1), 2.0, 120),
+    (d.date(2021, 8, 1), 2.0, 150),
+]
+
+buys = [
+    (d.date(2020, 5, 1), 1.0, 10),
+    (d.date(2020, 6, 1), 2.0, 25),
+    (d.date(2020, 7, 1), 2.0, 45),
+    (d.date(2020, 8, 1), 3.0, 60),
+]
 
 # sells = [
 #     (d.date(2021, 4, 16), 0.13541820, 35),
@@ -23,21 +37,6 @@ buys = []
 #     (d.date(2020, 5, 27), 0.08721041, 3.49),
 #     (d.date(2020, 6, 4), 0.27289865, 11.71),
 #     (d.date(2020, 6, 10), 0.27456618, 11.22),
-# ]
-
-
-# sells = [
-#     (d.date(2021, 5, 1), 3.0, 100),
-#     (d.date(2021, 6, 1), 1.0, 50),
-#     (d.date(2021, 7, 1), 2.0, 120),
-#     (d.date(2021, 8, 1), 2.0, 150),
-# ]
-#
-# buys = [
-#     (d.date(2020, 5, 1), 1.0, 10),
-#     (d.date(2020, 6, 1), 2.0, 25),
-#     (d.date(2020, 7, 1), 2.0, 45),
-#     (d.date(2020, 8, 1), 3.0, 60),
 # ]
 
 

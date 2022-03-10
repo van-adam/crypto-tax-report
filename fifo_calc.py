@@ -25,7 +25,7 @@ def calc_profit_fifo(sell: tuple) -> tuple:
             log.error("Not enough crypto assets for the sale {}: list index out of range!".format(sell))
             latest_sell_out = sell_outs.pop()
             t.buys.insert(len(t.buys), latest_sell_out)
-            log.info("Re-added latest sell out {} to buy transactions".format(latest_sell_out))
+            log.warning("Re-added latest sell out {} to buy transactions".format(latest_sell_out))
             return 0.0, 0.0, 0.0, 0.0
 
         buy_date, buy_quantity, buy_price = buy
