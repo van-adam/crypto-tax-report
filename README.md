@@ -9,7 +9,8 @@
    1. [Prerequisites](#prerequisites)
    2. [Pull Source Code](#pull-source-code)
    3. [Configuration](#configuration)
-4. [Disclaimer](#disclaimer)
+4. [Open Source Software (OSS)](#open-source-software-oss)
+5. [Disclaimer](#disclaimer)
 
 ## Overview
 The Crypto Tax Report calculates your taxable profits from crypto based on your transaction history.
