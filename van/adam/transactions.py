@@ -5,7 +5,7 @@ import datetime as d
 from openpyxl import load_workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
-import config as c
+import van.adam.config as c
 
 log = logging.getLogger()
 

@@ -1,9 +1,11 @@
-import datetime as d
 import logging
-from unittest import TestCase
 
 from van.adam import transactions as t
-from van.adam.inventory_methods import fifo
+import van.adam.inventory_methods.sell_outs
+from van.adam.inventory_methods import lifo
+import datetime as d
+
+from unittest import TestCase
 
 
 def test_init():
@@ -44,12 +46,12 @@ class Test(TestCase):
     def test_calc_profit_fifo(self):
         test_init()
         sell = t.sells[0]
-        self.assertEqual((35, 100, 65, 41.67), fifo.calc_profit(sell))
+        self.assertEqual((75, 100, 25, 25), lifo.calc_profit(sell))
         sell = t.sells[1]
-        self.assertEqual((22.5, 50, 27.5, 27.5), fifo.calc_profit(sell))
+        self.assertEqual((25, 50, 25, 25), lifo.calc_profit(sell))
         sell = t.sells[2]
-        self.assertEqual((42.5, 120, 77.5, 40.0), fifo.calc_profit(sell))
+        self.assertEqual((40, 120, 80, 80), lifo.calc_profit(sell))
         sell = t.sells[3]
-        self.assertEqual((40, 150, 110, 0), fifo.calc_profit(sell))
+        self.assertEqual((42.5, 150, 107.5, 0.0), lifo.calc_profit(sell))
 
-        self.assertEqual((0.0, 0.0, 0.0, 0.0), fifo.calc_profit((d.date(2021, 9, 1), 15.0, 500)))
+        self.assertEqual((0.0, 0.0, 0.0, 0.0), lifo.calc_profit((d.date(2021, 9, 1), 15.0, 500)))

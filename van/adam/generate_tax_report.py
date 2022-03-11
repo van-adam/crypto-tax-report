@@ -2,11 +2,12 @@ import logging
 
 from openpyxl import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
-from van.adam import transactions as t
 
 import config as c
 import excel_writer as x
-import inventory_methods.fifo as fifo
+from van.adam.inventory_methods import fifo
+from van.adam import transactions as t
+from van.adam.inventory_methods import lifo
 
 
 def generate_tax_report(token_abbr: str) -> None:
@@ -47,10 +48,13 @@ def generate_tax_report(token_abbr: str) -> None:
     sum_taxable = 0.0
     for sell_transaction in t.sells:
         # get profits per sell transaction
-        if c.USE_FIFO:
+        if c.INVENTORY_METHOD == "FIFO":
             buy_value, sell_value, sell_profit, taxable_profit = fifo.calc_profit(sell_transaction)
+        elif c.INVENTORY_METHOD == "LIFO":
+            buy_value, sell_value, sell_profit, taxable_profit = lifo.calc_profit(sell_transaction)
         else:
-            buy_value, sell_value, sell_profit, taxable_profit = (0.0, 0.0, 0.0, 0.0)
+            log.error("'{}' is not a valid inventory method!")
+            return
 
         log.info(tr_format.format(t.to_string(sell_transaction), token_abbr,
                                   buy_value, sell_value, sell_profit, taxable_profit))
