@@ -1,29 +1,31 @@
+import datetime
 import logging
 import datetime as d
 
 from openpyxl import load_workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
+import config as c
 
 log = logging.getLogger()
 
 # tuple: (date: datetime.date, quantity: float, price: float); sorted by date ascending
-# sells = []
-# buys = []
+sells = []
+buys = []
 
-sells = [
-    (d.date(2021, 5, 1), 3.0, 100),
-    (d.date(2021, 6, 1), 1.0, 50),
-    (d.date(2021, 7, 1), 2.0, 120),
-    (d.date(2021, 8, 1), 2.0, 150),
-]
-
-buys = [
-    (d.date(2020, 5, 1), 1.0, 10),
-    (d.date(2020, 6, 1), 2.0, 25),
-    (d.date(2020, 7, 1), 2.0, 45),
-    (d.date(2020, 8, 1), 3.0, 60),
-]
+# sells = [
+#     (d.date(2021, 5, 1), 3.0, 100),
+#     (d.date(2021, 6, 1), 1.0, 50),
+#     (d.date(2021, 7, 1), 2.0, 120),
+#     (d.date(2021, 8, 1), 2.0, 150),
+# ]
+#
+# buys = [
+#     (d.date(2020, 5, 1), 1.0, 10),
+#     (d.date(2020, 6, 1), 2.0, 25),
+#     (d.date(2020, 7, 1), 2.0, 45),
+#     (d.date(2020, 8, 1), 3.0, 60),
+# ]
 
 
 def import_transactions_from_file(file_path: str, sheet_name: str, destination_list: list) -> None:
@@ -94,3 +96,21 @@ def print_transactions(transactions: list, label: str) -> None:
         log.info(to_string(t))
 
     log.info("=" * line_length)
+
+
+def is_taxable(buy_date: datetime.date, sell_date: datetime.date) -> bool:
+    """
+    Determines whether a sell transaction is taxable based on the buy date and sell date. A sale is taxable whenever
+    the difference between buy date and sell date is smaller than 360 days.
+
+    :param buy_date: the buy date
+    :param sell_date: the sell date
+    :return: true if the sale is taxable
+    """
+    diff: datetime.timedelta = sell_date - buy_date
+    if diff.days < c.TAXFREE_TIMEDELTA:
+        taxable = True
+    else:
+        taxable = False
+
+    return taxable

@@ -1,4 +1,4 @@
-import config as c
+from van.adam import config as c
 from unittest import TestCase
 
 

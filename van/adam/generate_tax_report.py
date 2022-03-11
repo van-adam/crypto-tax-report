@@ -2,11 +2,11 @@ import logging
 
 from openpyxl import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
+from van.adam import transactions as t
 
 import config as c
 import excel_writer as x
-import transactions as t
-from fifo_calc import calc_profit_fifo
+import inventory_methods.fifo as fifo
 
 
 def generate_tax_report(token_abbr: str) -> None:
@@ -48,7 +48,7 @@ def generate_tax_report(token_abbr: str) -> None:
     for sell_transaction in t.sells:
         # get profits per sell transaction
         if c.USE_FIFO:
-            buy_value, sell_value, sell_profit, taxable_profit = calc_profit_fifo(sell_transaction)
+            buy_value, sell_value, sell_profit, taxable_profit = fifo.calc_profit(sell_transaction)
         else:
             buy_value, sell_value, sell_profit, taxable_profit = (0.0, 0.0, 0.0, 0.0)
 
