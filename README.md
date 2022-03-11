@@ -101,8 +101,8 @@ This script uses open source software (OSS). The OSS used are listed below.
 
 ## Disclaimer
 Tax laws differ from country to country. This script does not necessarily comply with the tax law in your country and 
-does not provide any numbers directly usable for tax declaration. It is advised to review the code of the script and 
-verify whether it fits the intended purpose and whether it complies with the tax law in your country. You agree that 
-the use of any numbers calculated by this script for a tax declaration is at your sole and exclusive risk. Grossly 
-negligent or willingly incorrect tax declaration may constitute an offense of tax evasion. Further, we make no warranty 
-that the script will be uninterrupted or error-free.
+does not provide any numbers directly usable for tax declaration. It is advised to test the script with some example 
+transactions and verify whether it fits the intended purpose and whether it complies with the tax law in your country. 
+You agree that the use of any numbers calculated by this script for a tax declaration is at your sole and exclusive 
+risk. Grossly negligent or willingly incorrect tax declaration may constitute an offense of tax evasion. Further, we 
+make no warranty that the script will be uninterrupted or error-free.

@@ -19,8 +19,8 @@ def generate_tax_report(token_abbr: str) -> None:
     transactions_file_path = c.TRANSACTIONS_DIR + token_abbr + "_transactions.xlsx"
     tax_report_file_path = c.TAX_REPORTS_DIR + token_abbr + "_tax_report.xlsx"
 
-    #t.import_transactions_from_file(transactions_file_path, "Sells", t.sells)
-    #t.import_transactions_from_file(transactions_file_path, "Buys", t.buys)
+    t.import_transactions_from_file(transactions_file_path, "Sells", t.sells)
+    t.import_transactions_from_file(transactions_file_path, "Buys", t.buys)
 
     # log all imported transactions
     log.info("Imported Transactions:")
