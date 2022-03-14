@@ -9,7 +9,8 @@
    1. [Prerequisites](#prerequisites)
    2. [Pull Source Code](#pull-source-code)
    3. [Configuration](#configuration)
-4. [Disclaimer](#disclaimer)
+4. [Open Source Software (OSS)](#open-source-software-oss)
+5. [Disclaimer](#disclaimer)
 
 ## Overview
 The Crypto Tax Report calculates your taxable profits from crypto based on your transaction history.
@@ -49,14 +50,31 @@ cost-basis of 300 EUR and you received 500 EUR.
 
 Your capital gains would be 500 - 300 = 200 EUR.
 
-<!--### LIFO (Last-In-First-Out)
-tbd-->
+### LIFO (Last-In-First-Out)
+In the LIFO inventory method, it is assumed that crypto assets that have been purchased last (Last-In) are sold
+first (First-Out).
+
+For example, consider the following buy transactions:
+- 1st March 2020; Quantity: 1.00; Costs: 100 EUR
+- 1st March 2021; Quantity: 2.00; Costs: 400 EUR
+
+If you sell now 2.00 tokens for 500 EUR, you would sell the tokens from the 2nd transaction that happened last and not
+from the 1st transaction that happened earlier.
+This results in a cost-basis of 400 EUR and you received 500 EUR.
+
+Your capital gains would be 500 - 400 = 100 EUR.
+
+Let us rewind and say you did sell not 2.00 but 1.00 tokens for 250 EUR. You then would sell 1.00 from the 2nd 
+transaction. This results in a cost-basis of 1/2 × 400 EUR = 200 EUR because you sold one half of tokens from the 2nd transaction costing you 200 EUR. This results in a
+cost-basis of 200 EUR and you received 250 EUR.
+
+Your capital gains would be 250 - 200 = 50 EUR.
 
 ## Getting Started
 
 ### Prerequisites
 The following prerequisites are necessary to execute the Python script:
-- Python 3+
+- Python 3.6+
   - openpyxl 3.0.0+
 - Ability to create .XLSX files, e.g. Microsoft Excel or Numbers by Apple.
 
@@ -71,9 +89,9 @@ In the Python file ```generate_tax_report.py``` at the top, you can define:
 1. ```LOG_LEVEL```: log level of the script
 2. ```TRANSACTIONS_DIR```: directory from which to import the crypto transactions
 3. ```TAX_REPORTS_DIR```: directory to which to export the crypto tax reports
-4. ```tokens```: token abbreviations for which to generate a tax report
-5. ```USE_FIFO```: whether to use inventory method FIFO (only one available so far)
-6. ```TAXFREE_TIMEDELTA```: the time difference between buy and sell transactions so they are considered non-taxable/tax-free
+4. ```INVENTORY_METHOD```: whether to use inventory method FIFO or LIFO
+5. ```TAXFREE_TIMEDELTA```: the time difference between buy and sell transactions so they are considered non-taxable/tax-free
+6. ```tokens```: token abbreviations for which to generate a tax report
 
 The transactions are imported from preformatted .XLSX files. To see an example of such a file, please refer to the 
 ```transations_example.xlsx``` file in the ```/transactions``` directory.
@@ -92,10 +110,16 @@ Usually you can easily run in command line or git bash:
 source path/to/venv/Scripts/activate
 ```
 
+## Open Source Software (OSS)
+This script uses open source software (OSS) that is listed below.
+- openpyxl
+  - license: MIT License (MIT)
+  - © Copyright 2010 - 2021 openpyxl
+
 ## Disclaimer
 Tax laws differ from country to country. This script does not necessarily comply with the tax law in your country and 
-does not provide any numbers directly usable for tax declaration. It is advised to review the code of the script and 
-verify whether it fits the intended purpose and whether it complies with the tax law in your country. You agree that 
-the use of any numbers calculated by this script for a tax declaration is at your sole and exclusive risk. Grossly 
-negligent or willingly incorrect tax declaration may constitute an offense of tax evasion. Further, we make no warranty 
-that the script will be uninterrupted or error-free.
+does not provide any numbers directly usable for tax declaration. It is advised to test the script with some example 
+transactions and verify whether it fits the intended purpose and whether it complies with the tax law in your country. 
+You agree that the use of any numbers calculated by this script for a tax declaration is at your sole and exclusive 
+risk. Grossly negligent or willingly incorrect tax declaration may constitute an offense of tax evasion. Further, we 
+make no warranty that the script will be uninterrupted or error-free.
