@@ -33,7 +33,7 @@ def calculate_output(sell_outs, sell_quantity, sell_price):
         if taxable:
             taxable_profit += weighted_profit
 
-    return round(total_buy_price, 2), round(sell_price, 2), round(total_profit, 2), round(taxable_profit, 2)
+    return round(total_buy_price, 2), round(total_profit, 2), round(taxable_profit, 2)
 
 
 log = logging.getLogger()

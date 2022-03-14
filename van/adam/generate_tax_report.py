@@ -5,8 +5,8 @@ from openpyxl.worksheet.worksheet import Worksheet
 
 import config as c
 import excel_writer as x
-from van.adam.inventory_methods import fifo
 from van.adam import transactions as t
+from van.adam.inventory_methods import fifo
 from van.adam.inventory_methods import lifo
 
 
@@ -29,8 +29,8 @@ def generate_tax_report(token_abbr: str) -> None:
     t.print_sells()
 
     # log header of table
-    tr_format = "{:<35} {:<5} {:<12} {:<12} {:<12} {:<12}"
-    log.info(tr_format.format("Sell Transaction", "Token", "Buy Value", "Sell Value", "Profits", "Taxable"))
+    tr_format = "{:<12} {:<5} {:<15} {:<10} {:<10} {:<10} {:<10}"
+    log.info(tr_format.format("Date", "Token", "Sell Quantity", "Buy Value", "Sell Value", "Profits", "Taxable"))
 
     # create workbook
     workbook: Workbook = Workbook()
@@ -38,31 +38,35 @@ def generate_tax_report(token_abbr: str) -> None:
     row_num = 1
 
     # create sheet header
-    x.add_row(sheet, 1, True, "left", "Sell Transaction", "Token", "Buy Value", "Sell Value", "Profits", "Taxable Profit")
+    x.add_row(sheet, 1, True, "left", "Date", "Token", "Sell Quantity", "Buy Value", "Sell Value", "Profits", "Taxable")
     row_num += 1
 
     # calculate sums
+    sum_sell_quantity = 0.0
     sum_buy_value = 0.0
     sum_sell_value = 0.0
     sum_profits = 0.0
     sum_taxable = 0.0
     for sell_transaction in t.sells:
+        sell_date, sell_quantity, sell_value = sell_transaction
+
         # get profits per sell transaction
         if c.INVENTORY_METHOD == "FIFO":
-            buy_value, sell_value, sell_profit, taxable_profit = fifo.calc_profit(sell_transaction)
+            buy_value, sell_profit, taxable_profit = fifo.calc_profit(sell_transaction)
         elif c.INVENTORY_METHOD == "LIFO":
-            buy_value, sell_value, sell_profit, taxable_profit = lifo.calc_profit(sell_transaction)
+            buy_value, sell_profit, taxable_profit = lifo.calc_profit(sell_transaction)
         else:
             log.error("'{}' is not a valid inventory method!")
             return
 
-        log.info(tr_format.format(t.to_string(sell_transaction), token_abbr,
+        log.info(tr_format.format(sell_date.strftime('%d-%m-%Y'), token_abbr, sell_quantity,
                                   buy_value, sell_value, sell_profit, taxable_profit))
-        x.add_row(sheet, row_num, False, "right", t.to_string(sell_transaction), token_abbr,
+        x.add_row(sheet, row_num, False, "right", sell_date.strftime('%d-%m-%Y'), token_abbr, sell_quantity,
                   buy_value, sell_value, sell_profit, taxable_profit)
         row_num += 1
 
         # add calculated values to sums
+        sum_sell_quantity += sell_quantity
         sum_buy_value += buy_value
         sum_sell_value += sell_value
         sum_profits += sell_profit
@@ -73,6 +77,7 @@ def generate_tax_report(token_abbr: str) -> None:
     x.add_row(sheet, row_num + 1, True, "right",
               "",
               "",
+              round(sum_sell_quantity, 10),
               round(sum_buy_value, 2),
               round(sum_sell_value, 2),
               round(sum_profits, 2),
