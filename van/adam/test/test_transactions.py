@@ -1,5 +1,5 @@
 import logging
-import transactions as t
+from van.adam import transactions as t
 import datetime as d
 
 from unittest import TestCase
@@ -37,9 +37,23 @@ class Test(TestCase):
 
         t.import_transactions_from_file(file_path, "Sells", non_empty_list)
         self.assertEqual(4, len(non_empty_list), "should be 4")
-        self.assertNotEqual(5, len(non_empty_list), "should not be 5")
 
     def test_to_string(self):
         transaction = (d.date(2021, 4, 16), 0.1354182, 35.0)
         output = t.to_string(transaction)
         self.assertEqual("16-04-2021: 0.1354182  :: 35.00  ", output)
+
+    def test_is_taxable(self):
+        sells = []
+        buys = []
+        t.import_transactions_from_file(file_path, "Sells", sells)
+        t.import_transactions_from_file(file_path, "Buys", buys)
+        # over 1 year
+        sell_date = sells[0][0]
+        buy_date = buys[0][0]
+        self.assertTrue(t.is_taxable(buy_date, sell_date))
+
+        # under 1 year
+        sell_date = sells[3][0]
+        buy_date = buys[0][0]
+        self.assertFalse(t.is_taxable(buy_date, sell_date))
