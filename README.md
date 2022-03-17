@@ -13,19 +13,35 @@
 5. [Disclaimer](#disclaimer)
 
 ## Overview
-The Crypto Tax Report calculates your taxable profits from crypto based on your transaction history.
-The used inventory method to calculate your profits is FIFO (First-In-First-Out).
+The Crypto Tax Report calculates your taxable profits from crypto based on your transaction history and the configured 
+inventory method, for example FIFO (First-In-First-Out) or LIFO (Last-In-First-Out).
 
-Sell transactions that are apart from their corresponding buy transactions by more than or equal to a configurable time 
+**Important Note**: your transaction history is only read and processed and will not be updated, changed, or uploaded to the interweb.
+If you feel paranoid, make your files read-only and unplug your LAN cable or disable the WI-FI or both.
+
+### How it works
+First, the script imports the buy transactions and sell transactions from XLSX files (refer to 
+[Configuration](#configuration)). 
+
+After that, for every sell transaction, the script takes the token quantity from 
+as many buy transactions as needed and calculates the profits. If only a fraction of a buy transaction was used, the 
+buy transaction is updated in the transaction history (updated in memory, not in the XLSX file). The script takes buy 
+transactions according to the configured inventory method. 
+
+Sell transactions that are apart from their corresponding buy transactions by more than or equal to a configurable time
 difference, e. g. 360 days (1 year), are considered non-taxable or "tax-free" so to say.
 
-#### A glimpse into history
+After processing all the sell transactions, the script generates a tax report XLSX file. For every sell transaction 
+there will be one entry in the tax report showing the sell date, token, sell quantity, buy value, sell value, profits, 
+and taxable profits.
+
+### A glimpse into history
 I created this project when I almost finished my tax declaration 2021 but still had one procrastinated part left to do -
-the crypto taxes. I knew what I needed to do when I would have the purchase value and the sell value but how to get to 
-the purchase value of every sell transaction while considering FIFO was a mind-numbing obstacle for me. So I looked for 
-software online that does the job for me, and I was faced with prices of three-digits for every tax year. I considered 
-those prices ridiculous when you barely made four digits with crypto so far. Then I became aware of my basic Python 
-skills and thought maybe I could just programm it myself. So here it is!
+the crypto taxes. I knew what I needed to do when I would have the buy value and the sell value but how to get to the 
+buy value of every sell transaction while considering FIFO was a mind-numbing obstacle for me. So I looked for software 
+online that does the job for me, and I was faced with prices of three-digits for every tax year. I considered those 
+prices ridiculous when you barely made four digits with crypto so far. Then I became aware of my basic Python skills and
+thought maybe I could just programm it myself. So here it is!
 
 ## Inventory Methods
 ### FIFO (First-In-First-Out)
@@ -96,7 +112,7 @@ In the Python file ```generate_tax_report.py``` at the top, you can define:
 The transactions are imported from preformatted .XLSX files. To see an example of such a file, please refer to the 
 ```transations_example.xlsx``` file in the ```/transactions``` directory.
 The transactions files need to be named as ```[token]_transactions.xlsx```, e.g. ```BTC_transactions.xlsx``` and 
-placed in the ```TRANSACTIONS_DIR```.
+placed in the ```TRANSACTIONS_DIR```. The transactions should be sorted by date ascending.
 
 ### Run Script
 After configuring the script, run the script via command line: ```python generate_tax_report.py```
