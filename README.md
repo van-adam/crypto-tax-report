@@ -1,15 +1,17 @@
 # crypto-tax-report
 
 ## Table of Contents
+
 1. [Overview](#overview)
-   1. [A glimpse into history](#a-glimpse-into-history)
+    1. [A glimpse into history](#a-glimpse-into-history)
 2. [Inventory Methods](#inventory-methods)
-   1. [FIFO (First-In-First-Out)](#fifo-first-in-first-out)
+    1. [FIFO (First-In-First-Out)](#fifo--first-in-first-out-)
+    2. [LIFO (Last-In-First-Out)](#lifo--last-in-first-out-)
 3. [Getting Started](#getting-started)
-   1. [Prerequisites](#prerequisites)
-   2. [Pull Source Code](#pull-source-code)
-   3. [Configuration](#configuration)
-4. [Open Source Software (OSS)](#open-source-software-oss)
+    1. [Prerequisites](#prerequisites)
+    2. [Pull Source Code](#pull-source-code)
+    3. [Configuration](#configuration)
+4. [Open Source Software (OSS)](#open-source-software--oss-)
 5. [Disclaimer](#disclaimer)
 
 ## Overview
